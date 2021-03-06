@@ -8,8 +8,7 @@ _ID_DESCRIPTION = "Идентификатор запроса к сервису."
 
 
 class WrapRequest(BaseApi):
-    """ Запрос.
-    """
+    """ Запрос."""
     data: Any = Field(description="Параметры запроса.", default=None)
     id: Optional[StrictInt] = Field(description=_ID_DESCRIPTION)
 

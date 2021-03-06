@@ -5,8 +5,7 @@ from base import BaseApi
 
 
 class PersonCreate(BaseApi):
-    """ Параметры для создания персоны.
-    """
+    """ Параметры для создания персоны."""
     name: StrictStr = Field(description="Имя.", example="Oleg")
 
 

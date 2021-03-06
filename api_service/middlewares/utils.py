@@ -1,7 +1,8 @@
+""" Классы и функции для middlewares."""
 import json
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Callable, Optional, Dict
+from typing import Any, Callable, Dict, Optional
 from uuid import UUID
 
 
@@ -41,6 +42,11 @@ class ArgumentsManager:
     """ Менеджер для аргументов обработчика.
         Связывает имя аргумента с действием, которое надо совершить для
         получения значения аргумента.
+    TODO: Сейчас менеджер очень простой.
+        Можно добавить регистрацию сразу нескольких ключей одного вида.
+        А так же, добавить правила для разрешений конфликтов имен.
+        И проч... например, и то, что потом можно будет использовать при
+        сборке документации.
     """
 
     def __init__(self) -> None:
@@ -54,10 +60,18 @@ class ArgumentsManager:
         """
         self.getters[arg_name] = self.get_request_body
 
-    def get_request_body(self, raw_data: RawDataForArgument) -> Callable:
+    def get_request_body(self, raw_data: RawDataForArgument):
         return raw_data.request_body
 
     # Ключи в request.app ----------------------------------------------------
+
+    def reg_request_key(self, arg_name) -> None:
+        """ Регистрация имени аргумента для тела запроса.
+        """
+        self.getters[arg_name] = self.get_request_key
+
+    def get_request_key(self, raw_data: RawDataForArgument):
+        return raw_data.request[raw_data.arg_name]
 
     def reg_app_key(self, arg_name) -> None:
         """ Регистрация имени аргумента которых хранится в app.
