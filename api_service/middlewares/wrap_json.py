@@ -4,7 +4,6 @@
 from typing import Any, Callable
 
 from aiohttp import web
-from api_service.data_classes.errors import ErrorResponse
 from api_service.data_classes.wraps import WrapRequest, WrapResponse
 from valdec.errors import ValidationArgumentsError
 
@@ -24,10 +23,12 @@ class WrapExample(KwargsHandler):
 
     def get_error_body(self, request: web.Request, error: Exception) -> dict:
 
-        result = ErrorResponse(
-            error_type=str(type(error)), error_message=str(error)
-        )
-        response = WrapResponse(
+        """ Формирует и отдает сообщение об ошибке.
+                """
+        # Так как мы знаем какая у нас оболочка ответа, сразу сделаем словарь
+        # с аналогичной "схемой"
+        result = dict(error_type=str(type(error)), error_message=str(error))
+        response = dict(
             success=False,
             result=result,
             # Достанем id, если он был сохранен в методе run_handler()
@@ -35,7 +36,7 @@ class WrapExample(KwargsHandler):
         )
 
         # Отдаем всегда словарь
-        return response.dict()
+        return response
 
     async def run_handler(
         self, request: web.Request, handler: Callable, request_body: Any
