@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Callable, Dict, Optional
 from uuid import UUID
+from aiohttp import web
 
 
 # json -----------------------------------------------------------------------
@@ -12,6 +13,7 @@ class ServiceJSONEncoder(json.JSONEncoder):
     """ Кодирование данных сервиса в json.
         (пример подключения обработки UUID и datetime)
     """
+
     def default(self, obj):
 
         if isinstance(obj, UUID):
@@ -32,8 +34,7 @@ def json_dumps(obj) -> str:
 
 @dataclass
 class RawDataForArgument:
-
-    request: Any
+    request: web.Request
     request_body: Any
     arg_name: Optional[str] = None
 
@@ -50,7 +51,6 @@ class ArgumentsManager:
     """
 
     def __init__(self) -> None:
-
         self.getters: Dict[str, Callable] = {}
 
     # Тело json запроса ------------------------------------------------------
@@ -66,7 +66,7 @@ class ArgumentsManager:
     # Ключи в request.app ----------------------------------------------------
 
     def reg_request_key(self, arg_name) -> None:
-        """ Регистрация имени аргумента для тела запроса.
+        """ Регистрация имени аргумента который хранится в request.
         """
         self.getters[arg_name] = self.get_request_key
 
@@ -74,7 +74,7 @@ class ArgumentsManager:
         return raw_data.request[raw_data.arg_name]
 
     def reg_app_key(self, arg_name) -> None:
-        """ Регистрация имени аргумента которых хранится в app.
+        """ Регистрация имени аргумента который хранится в app.
         """
         self.getters[arg_name] = self.get_app_key
 
