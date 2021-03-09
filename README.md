@@ -1,5 +1,4 @@
-# Json_API_aiohttp
-Json api сервис на aiohttp
+# Json api сервис на aiohttp
 
 ##### _разработка Spiridonov R.A aka Speccy_
 
