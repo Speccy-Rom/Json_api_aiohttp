@@ -21,10 +21,7 @@ class WrapsKwargsHandler(KwargsHandler):
         # Так как мы знаем какая у нас оболочка ответа, сразу сделаем словарь
         # с аналогичной "схемой"
         result = dict(error_type=str(type(error)), error_message=str(error))
-        response = dict(
-            success=False, result=result, id=request.get(KEY_NAME_FOR_ID)
-        )
-        return response
+        return dict(success=False, result=result, id=request.get(KEY_NAME_FOR_ID))
 
     async def run_handler(
             self, request: web.Request, handler: Callable, request_body: Any

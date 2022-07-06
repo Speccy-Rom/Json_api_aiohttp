@@ -13,5 +13,3 @@ async def handler500(request: web.Request, data: dict) -> dict:
     """ Пример обработчика в котором произойдет ошибка.
     """
     raise Exception("Пример ошибки 500")
-
-    return data
